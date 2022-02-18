@@ -8,7 +8,7 @@ let package = Package(
     platforms: [ .macOS(.v11), .iOS(.v14)],
     products: [.library(name: "AudioKitUI", targets: ["AudioKitUI"])],
     dependencies: [
-        .package(url: "https://github.com/Moriquendi/AudioKit", from: "5.3.0"),
+        .package(url: "https://github.com/Moriquendi/AudioKit", .branch("main")),
     ],
     targets: [
         .target(name: "AudioKitUI", dependencies: ["AudioKit"]),
