@@ -1,17 +1,17 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.5
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
 let package = Package(
     name: "AudioKitUI",
-    platforms: [ .macOS(.v11), .iOS(.v14)],
+    platforms: [ .macOS(.v12), .iOS(.v15)],
     products: [.library(name: "AudioKitUI", targets: ["AudioKitUI"])],
     dependencies: [
         .package(url: "https://github.com/Moriquendi/AudioKit", .branch("main")),
     ],
     targets: [
-        .target(name: "AudioKitUI", dependencies: ["AudioKit"]),
+        .target(name: "AudioKitUI", dependencies: ["AudioKit"], resources: [.process("Resources")]),
         .testTarget(name: "AudioKitUITests", dependencies: ["AudioKitUI"]),
     ]
 )
