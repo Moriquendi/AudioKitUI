@@ -12,9 +12,7 @@ class RawOutputModel: ObservableObject {
 
     init() {
         if isPreview {
-            for _ in 0...100 {
-                data.append(CGFloat.random(in: -1.0...1.0))
-            }
+            mockAudioInput()
         }
     }
 
@@ -34,26 +32,40 @@ class RawOutputModel: ObservableObject {
     func updateData(_ data: [CGFloat]) {
         self.data = data
     }
+
+    func mockAudioInput() {
+        var newData = [CGFloat]()
+        for _ in 0 ... 100 {
+            newData.append(CGFloat.random(in: -1.0 ... 1.0))
+        }
+        updateData(newData)
+
+        let waitTime: TimeInterval = 0.1
+        DispatchQueue.main.asyncAfter(deadline: .now() + waitTime) {
+            self.mockAudioInput()
+        }
+    }
 }
 
 public struct RawOutputView: View {
     @StateObject var rawOutputModel = RawOutputModel()
-    @Binding var strokeColor: Color
-    @Binding var isNormalized: Bool
-    @Binding var scaleFactor: CGFloat
-    var bufferSize: Int = 1024
+    let strokeColor: Color
+    let isNormalized: Bool
+    let scaleFactor: CGFloat
+    let bufferSize: Int
     var node: Node?
 
     public init(_ node: Node? = nil,
                 bufferSize: Int = 1024,
-                strokeColor: Binding<Color> = .constant(Color.black),
-                isNormalized: Binding<Bool> = .constant(false),
-                scaleFactor: Binding<CGFloat> = .constant(1.0)) {
+                strokeColor: Color = Color.black,
+                isNormalized: Bool = false,
+                scaleFactor: CGFloat = 1.0)
+    {
         self.node = node
         self.bufferSize = bufferSize
-        self._strokeColor = strokeColor
-        self._isNormalized = isNormalized
-        self._scaleFactor = scaleFactor
+        self.strokeColor = strokeColor
+        self.isNormalized = isNormalized
+        self.scaleFactor = scaleFactor
     }
 
     public var body: some View {
@@ -87,8 +99,8 @@ struct RawAudioPlot: Shape {
         }
 
         for index in 0 ..< data.count {
-            let x = index.mapped(from: 0...data.count, to: rect.minX...rect.maxX)
-            let y = data[index].mappedInverted(from: -rangeValue...rangeValue, to: rect.minY...rect.maxY)
+            let x = index.mapped(from: 0 ... data.count, to: rect.minX ... rect.maxX)
+            let y = data[index].mappedInverted(from: -rangeValue ... rangeValue, to: rect.minY ... rect.maxY)
 
             coordinates.append(CGPoint(x: x, y: y))
         }
@@ -102,5 +114,6 @@ struct RawAudioPlot: Shape {
 struct RawOutputView_Previews: PreviewProvider {
     static var previews: some View {
         RawOutputView()
+            .background(Color.white)
     }
 }

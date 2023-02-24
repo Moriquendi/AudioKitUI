@@ -12,6 +12,13 @@ class FFTModel: ObservableObject {
     var maxAmplitude: Float = 0.0
     var minAmplitude: Float = -70.0
     var referenceValueForFFT: Float = 12.0
+    @Environment(\.isPreview) var isPreview
+
+    init() {
+        if isPreview {
+            mockAudioInput()
+        }
+    }
 
     func updateNode(_ node: Node, fftValidBinCount: FFTValidBinCount? = nil) {
         if node !== self.node {
@@ -55,6 +62,18 @@ class FFTModel: ObservableObject {
             self.amplitudes = decibels
         }
     }
+
+    func mockAudioInput() {
+        var mockFloats = [Float]()
+        for _ in 0...65 {
+            mockFloats.append(Float.random(in: 0...0.1))
+        }
+        updateAmplitudes(mockFloats)
+        let waitTime: TimeInterval = 0.1
+        DispatchQueue.main.asyncAfter(deadline: .now() + waitTime) {
+            self.mockAudioInput()
+        }
+    }
 }
 
 public struct FFTView: View {
@@ -89,7 +108,7 @@ public struct FFTView: View {
         self.includeCaps = includeCaps
         self.maxAmplitude = maxAmplitude
         self.minAmplitude = minAmplitude
-        self.fftValidBinCount = validBinCount
+        fftValidBinCount = validBinCount
         self.backgroundColor = backgroundColor
 
         if maxAmplitude < minAmplitude {
@@ -153,7 +172,7 @@ struct AmplitudeBar: View {
     var linearGradient: LinearGradient
     var paddingFraction: CGFloat = 0.2
     var includeCaps: Bool = true
-    var backgroundColor: Color = Color.black
+    var backgroundColor: Color = .black
 
     var body: some View {
         GeometryReader { geometry in
@@ -166,7 +185,7 @@ struct AmplitudeBar: View {
                 Rectangle()
                     .fill(backgroundColor)
                     .mask(Rectangle().padding(.bottom, geometry.size.height * CGFloat(amplitude)))
-                    .animation(.easeOut(duration: 0.15))
+                    .animation(.easeOut(duration: 0.15), value: amplitude)
 
                 // White bar with slower animation for floating effect
                 if includeCaps {
@@ -190,6 +209,6 @@ struct AmplitudeBar: View {
             .fill(Color.white)
             .frame(height: capHeight)
             .offset(x: 0.0, y: -height > capOffset - capHeight ? capMaxOffset : capOffset) // prevents offset from pushing cap outside of its frame
-            .animation(.easeOut(duration: 0.6))
+            .animation(.easeOut(duration: 0.6), value: amplitude)
     }
 }

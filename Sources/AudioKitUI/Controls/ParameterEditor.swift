@@ -1,31 +1,47 @@
 // Copyright AudioKit. All Rights Reserved. Revision History at http://github.com/AudioKit/AudioKitUI/
 
-import SwiftUI
 import AudioKit
+import AudioUnit
+import SwiftUI
 
-/// Hack to get SwiftUI to poll and refresh our UI.
-class Refresher: ObservableObject {
-    @Published var version = 0
+class ParameterEditorModel: ObservableObject {
+    @Published var value: AUValue = 0 {
+        didSet {
+            if let param = param {
+                param.value = value
+            }
+        }
+    }
+
+    var paramToken: AUParameterObserverToken?
+
+    var param: NodeParameter? {
+        didSet {
+            guard let param = param else { return }
+            value = param.value
+            paramToken = param.parameter.token { [weak self] _, newValue in
+                DispatchQueue.main.async {
+                    self?.value = newValue
+                }
+            }
+        }
+    }
 }
 
 public struct ParameterEditor: View {
     var param: NodeParameter
-    @StateObject var refresher = Refresher()
+    @StateObject var model = ParameterEditorModel()
 
     public init(param: NodeParameter) {
         self.param = param
     }
 
-    func getBinding() -> Binding<Float> {
-        Binding(get: { param.value }, set: { param.value = $0; refresher.version += 1; })
-    }
-
     func getIntBinding() -> Binding<Int> {
-        Binding(get: { Int(param.value) }, set: { param.value = AUValue($0); refresher.version += 1; })
+        Binding(get: { Int(model.value) }, set: { model.value = AUValue($0) })
     }
 
-    func intValues() -> Array<Int> {
-        Array(Int(param.range.lowerBound)...Int(param.range.upperBound))
+    func intValues() -> [Int] {
+        Array(Int(param.range.lowerBound) ... Int(param.range.upperBound))
     }
 
     public var body: some View {
@@ -35,7 +51,7 @@ public struct ParameterEditor: View {
             switch param.def.unit {
             case .boolean:
                 Toggle(isOn: Binding(get: { param.value == 1.0 }, set: {
-                    param.value = $0 ? 1.0 : 0.0; refresher.version += 1;
+                    param.value = $0 ? 1.0 : 0.0
                 }), label: { Text(param.def.name) })
             case .indexed:
                 if param.range.upperBound - param.range.lowerBound < 5 {
@@ -46,20 +62,22 @@ public struct ParameterEditor: View {
                     }
                     .pickerStyle(.segmented)
                 } else {
-                    Slider(value: getBinding(),
+                    Slider(value: $model.value,
                            in: param.range,
                            step: 1.0,
                            label: { Text(param.def.name).frame(width: 200, alignment: .leading) },
                            minimumValueLabel: { Text(String(format: "%.0f", param.range.lowerBound)) },
-                           maximumValueLabel: { Text(String(format: "%.0f", param.range.upperBound)) } )
+                           maximumValueLabel: { Text(String(format: "%.0f", param.range.upperBound)) })
                 }
             default:
-                Slider(value: getBinding(),
+                Slider(value: $model.value,
                        in: param.range,
                        label: { Text(param.def.name).frame(width: 200, alignment: .leading) },
                        minimumValueLabel: { Text(String(format: "%.2f", param.range.lowerBound)) },
                        maximumValueLabel: { Text(String(format: "%.2f", param.range.upperBound)) })
             }
+        }.onAppear {
+            model.param = param
         }
     }
 }

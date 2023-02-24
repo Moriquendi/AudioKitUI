@@ -5,7 +5,8 @@
 
 [![Build Status](https://github.com/AudioKit/AudioKitUI/workflows/CI/badge.svg)](https://github.com/AudioKit/AudioKitUI/actions?query=workflow%3ACI)
 [![License](https://img.shields.io/github/license/AudioKit/AudioKitUI)](https://github.com/AudioKit/AudioKitUI/blob/main/LICENSE)
-[![Platform](https://img.shields.io/cocoapods/p/AudioKit)](https://github.com/AudioKit/AudioKit/wiki)
+[![Swift Compatibility](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FAudioKit%2FAudioKitUI%2Fbadge%3Ftype%3Dswift-versions&label=)](https://swiftpackageindex.com/AudioKit/AudioKitUI)
+[![Platform Compatibility](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FAudioKit%2FAudioKitUI%2Fbadge%3Ftype%3Dplatforms&label=)](https://swiftpackageindex.com/AudioKit/AudioKitUI)
 [![Reviewed by Hound](https://img.shields.io/badge/Reviewed_by-Hound-8E64B0.svg)](https://houndci.com)
 [![Twitter Follow](https://img.shields.io/twitter/follow/AudioKitPro.svg?style=social)](https://twitter.com/AudioKitPro)
 
@@ -15,8 +16,7 @@ Waveform plots and controls that can be used to jump start your AudioKit-powered
 
 ## Documentation
 
-* [AudioKit.io Section about AudioKitUI](https://audiokit.io/Packages/AudioKitUI)
-* [API Reference Docs](https://github.com/AudioKit/AudioKitUI/wiki)
+Complete API reference appears in the [AudioKit.io web site](https://www.audiokit.io/AudioKitUI/documentation/audiokitui)
 
 ## Requirements
 
@@ -38,4 +38,4 @@ Because some user interfaces are quite complex, and don't really have AudioKit a
 
 [https://github.com/AudioKit/PianoRoll](https://github.com/AudioKit/PianoRoll)
 
-<img src="https://raw.githubusercontent.com/AudioKit/PianoRoll/main/screenshot.png" alt="piano roll screenshot" style="width:75%;">
+<img src="https://raw.githubusercontent.com/AudioKit/PianoRoll/main/Sources/PianoRoll/PianoRoll.docc/Resources/screenshot.png" alt="piano roll screenshot" style="width:75%;">
