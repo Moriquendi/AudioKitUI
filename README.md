@@ -3,7 +3,6 @@
 
 # AudioKit User Interfaces
 
-[![Build Status](https://github.com/AudioKit/AudioKitUI/workflows/CI/badge.svg)](https://github.com/AudioKit/AudioKitUI/actions?query=workflow%3ACI)
 [![License](https://img.shields.io/github/license/AudioKit/AudioKitUI)](https://github.com/AudioKit/AudioKitUI/blob/main/LICENSE)
 [![Swift Compatibility](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FAudioKit%2FAudioKitUI%2Fbadge%3Ftype%3Dswift-versions&label=)](https://swiftpackageindex.com/AudioKit/AudioKitUI)
 [![Platform Compatibility](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FAudioKit%2FAudioKitUI%2Fbadge%3Ftype%3Dplatforms&label=)](https://swiftpackageindex.com/AudioKit/AudioKitUI)
